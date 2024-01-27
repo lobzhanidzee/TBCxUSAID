@@ -65,12 +65,12 @@ function navBarOpen() {
 
   document.querySelector("header").style.zIndex = "5";
   document.querySelector("header img").style.opacity = "0.5";
+  document.querySelector("header").classList.remove("headerScroll");
 
   document.querySelector(".burgerbox").style.position = "fixed";
   document.querySelector(".burgerbox").style.right = "20px";
 
   document.getElementById("background-blur").style.display = "block";
-  document.querySelector("header").classList.remove("headerScroll");
 
   document.body.setAttribute("data-scroll-position", scrollPosition);
 
@@ -80,14 +80,13 @@ function navBarOpen() {
 }
 
 function navBarClose() {
-  let scrollPosition =
-    parseInt(document.body.getAttribute("data-scroll-position"), 10) || 0;
+  let scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
   document.querySelector("header").classList.toggle("headerScroll");
   document.querySelector("header").style.opacity = "auto";
   document.querySelector("header img").style.opacity = "1";
-
   document.querySelector("header").style.zIndex = "2";
+
   document.body.style.overflow = "auto";
 
   document.getElementById("background-blur").style.display = "none";
