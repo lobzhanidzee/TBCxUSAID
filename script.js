@@ -4,7 +4,7 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   function isDesktopResolution() {
-    return window.innerWidth >= 768;
+    return window.innerWidth >= 1024;
   }
 
   function handleScroll() {
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("header").style.position = "sticky";
       } else {
         document.querySelector("header").style.position = "relative";
+        document.querySelector(".burgerbox").style.position = "static";
       }
       document.addEventListener("scroll", handleScroll);
       prevScrollPos = currentScrollPos;
@@ -37,7 +38,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Disable scroll while navbar is active
 let isScrollDisabled = false;
+const backgroundBlur = document.getElementById("background-blur");
 
+backgroundBlur.addEventListener("click", function () {
+  document.getElementById("menyAvPaa").checked = false;
+  enableScroll();
+});
 document.querySelector(".burger").addEventListener("click", function () {
   if (isScrollDisabled) {
     enableScroll();
@@ -45,22 +51,31 @@ document.querySelector(".burger").addEventListener("click", function () {
     disableScroll();
   }
 });
+function preventDefault(e) {
+  e.preventDefault();
+}
 
 function disableScroll() {
   let scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
-  document.body.style.overflow = "hidden";
-  document.body.style.boxShadow = "1000px 1500px 1000px #212121 inset";
-  document.body.style.position = "static";
-  document.querySelector("main").style.opacity = "0.7";
-  document.querySelector("header").style.boxShadow =
-    "1000px 1500px 1000px #black inset";
+  if (window.scrollY > 0) {
+    document.querySelector("header").classList.toggle("headerScroll");
+    document.querySelector("header").style.position = "sticky";
+  }
+
+  document.querySelector("header").style.zIndex = "5";
   document.querySelector("header img").style.opacity = "0.5";
-  document.querySelector("footer").style.opacity = "0.7";
+
+  document.querySelector(".burgerbox").style.position = "fixed";
+  document.querySelector(".burgerbox").style.right = "20px";
+
+  document.getElementById("background-blur").style.display = "block";
   document.querySelector("header").classList.remove("headerScroll");
 
   document.body.setAttribute("data-scroll-position", scrollPosition);
 
+  window.addEventListener("wheel", preventDefault, { passive: false }); // for modern desktop
+  window.addEventListener("touchmove", preventDefault, { passive: false }); // for mobile
   isScrollDisabled = true;
 }
 
@@ -68,47 +83,33 @@ function enableScroll() {
   let scrollPosition =
     parseInt(document.body.getAttribute("data-scroll-position"), 10) || 0;
 
-  document.body.style.overflow = "auto";
-  document.querySelector("main").style.opacity = "1";
-  document.body.style.boxShadow = "none";
-  document.querySelector("header").style.boxShadow = "none";
-  document.querySelector("header").classList.add("headerScroll");
+  document.querySelector("header").classList.toggle("headerScroll");
+  document.querySelector("header").style.opacity = "auto";
   document.querySelector("header img").style.opacity = "1";
-  document.querySelector("footer").style.opacity = "1";
-  document.body.style.position = "static";
+
+  document.querySelector("header").style.zIndex = "2";
+  document.body.style.overflow = "auto";
+
+  document.getElementById("background-blur").style.display = "none";
 
   window.scrollTo(0, scrollPosition);
-
+  window.removeEventListener("wheel", preventDefault, { passive: false }); // for modern desktop
+  window.removeEventListener("touchmove", preventDefault, { passive: false });
   isScrollDisabled = false;
 }
 
 // For slider
 let activeSlide = 0;
-
-const controller = function (x) {
-  activeSlide += x;
-  slideshow(activeSlide);
-};
-
-const dotController = function (x) {
-  activeSlide = x;
-  slideshow(activeSlide);
-};
-const automaticSlide = function () {
-  activeSlide++;
-  slideshow(activeSlide);
-};
-setInterval(automaticSlide, 5000);
+let recentlyClicked = false;
 
 const bright = function (i) {
   let dotActive = document.querySelector(`.dot${i}`);
-  i = activeSlide;
-  dotActive.style.opacity = "1";
-  if (i != activeSlide) {
+  if (i == activeSlide) {
+    dotActive.style.opacity = "1";
+  } else {
     dotActive.style.opacity = "0.8";
   }
 };
-
 bright(activeSlide);
 
 const slideshow = function (num) {
@@ -125,9 +126,45 @@ const slideshow = function (num) {
     y.style.display = "none";
   }
   slides[num].style.display = "flex";
-  bright(activeSlide);
+  for (let i = 0; i < slides.length; i++) {
+    bright(i);
+  }
 };
 slideshow(activeSlide);
+
+let timeoutId = null;
+const delay = 4000;
+
+const controller = function (x) {
+  activeSlide += x;
+  recentlyClicked = true;
+  clearTimeout(timeoutId);
+  timeoutId = setTimeout(() => {
+    recentlyClicked = false;
+  }, delay);
+
+  slideshow(activeSlide);
+};
+
+const dotController = function (x) {
+  activeSlide = x;
+  recentlyClicked = true;
+  clearTimeout(timeoutId);
+  timeoutId = setTimeout(() => {
+    recentlyClicked = false;
+  }, delay);
+
+  slideshow(activeSlide);
+};
+
+const automaticSlide = function () {
+  if (recentlyClicked == false) {
+    activeSlide++;
+    slideshow(activeSlide);
+  }
+};
+
+setInterval(automaticSlide, 5000);
 
 // For frequancy asked question
 const firstQuestionBtn = document.querySelector(".question1 > div");
@@ -174,3 +211,25 @@ thirdQuestionBtn.addEventListener("click", function () {
   showText(thirdQuestion, thirdArrow);
   hideText(firstQuestion, secondQuestion, firstArrow, secondArrow);
 });
+
+document
+  .getElementById("expandButton")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+    document.getElementById("background-blur").style.display = "block";
+    document.getElementById("expandableWindow").classList.toggle("show");
+  });
+
+const closeBtn = function (btnNum) {
+  document
+    .getElementById(`${btnNum}`)
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      document.getElementById("background-blur").style.display = "none";
+      document.getElementById("expandableWindow").classList.remove("show");
+    });
+};
+
+closeBtn("closeButton");
+closeBtn("closeLargeButton");
+closeBtn("background-blur");
