@@ -42,20 +42,20 @@ const backgroundBlur = document.getElementById("background-blur");
 
 backgroundBlur.addEventListener("click", function () {
   document.getElementById("menyAvPaa").checked = false;
-  enableScroll();
+  navBarClose();
 });
 document.querySelector(".burger").addEventListener("click", function () {
   if (isScrollDisabled) {
-    enableScroll();
+    navBarClose();
   } else {
-    disableScroll();
+    navBarOpen();
   }
 });
 function preventDefault(e) {
   e.preventDefault();
 }
-
-function disableScroll() {
+// For nav bar open and close
+function navBarOpen() {
   let scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
 
   if (window.scrollY > 0) {
@@ -74,12 +74,12 @@ function disableScroll() {
 
   document.body.setAttribute("data-scroll-position", scrollPosition);
 
-  window.addEventListener("wheel", preventDefault, { passive: false }); // for modern desktop
-  window.addEventListener("touchmove", preventDefault, { passive: false }); // for mobile
+  window.addEventListener("wheel", preventDefault, { passive: false });
+  window.addEventListener("touchmove", preventDefault, { passive: false });
   isScrollDisabled = true;
 }
 
-function enableScroll() {
+function navBarClose() {
   let scrollPosition =
     parseInt(document.body.getAttribute("data-scroll-position"), 10) || 0;
 
@@ -93,7 +93,7 @@ function enableScroll() {
   document.getElementById("background-blur").style.display = "none";
 
   window.scrollTo(0, scrollPosition);
-  window.removeEventListener("wheel", preventDefault, { passive: false }); // for modern desktop
+  window.removeEventListener("wheel", preventDefault, { passive: false });
   window.removeEventListener("touchmove", preventDefault, { passive: false });
   isScrollDisabled = false;
 }
@@ -166,7 +166,7 @@ const automaticSlide = function () {
 
 setInterval(automaticSlide, 5000);
 
-// For frequancy asked question
+// For frequancy asked question container
 const firstQuestionBtn = document.querySelector(".question1 > div");
 const secondQuestionBtn = document.querySelector(".question2 > div");
 const thirdQuestionBtn = document.querySelector(".question3 > div");
