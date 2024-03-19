@@ -1,18 +1,18 @@
 @font-face {
   font-family: "TBC-font-1";
-  src: url("./fonts/file.woff2");
+  src: url("./fonts/file.woff2") format("woff2");
 }
 @font-face {
   font-family: "TBC-font-2";
-  src: url("./fonts/file_1.woff2");
+  src: url("./fonts/file_1.woff2") format("woff2");
 }
 @font-face {
   font-family: "TBC-font-3";
-  src: url("./fonts/file_2.woff2");
+  src: url("./fonts/file_2.woff2") format("woff2");
 }
 @font-face {
   font-family: "TBC-font-4";
-  src: url("./fonts/file_3.woff2");
+  src: url("./fonts/file_3.woff2") format("woff2");
 }
 
 * {
@@ -23,6 +23,7 @@
 body {
   color: #f4f4f4;
 }
+/* ---------Header---------- */
 header {
   display: flex;
   justify-content: space-evenly;
@@ -137,6 +138,7 @@ nav a:hover {
   margin-left: 0px;
 }
 
+/* ---------Main container---------- */
 main {
   animation-name: fade;
   animation-duration: 1s;
@@ -164,10 +166,11 @@ main {
 .main-container p {
   font-size: 33px;
 }
-
 .boxsize {
   width: 1000px;
 }
+
+/* ---------Description container---------- */
 .description-container {
   display: flex;
   justify-content: center;
@@ -200,6 +203,7 @@ main {
   font-family: "TBC-font-4";
 }
 
+/* ---------Courses container---------- */
 .courses-container {
   display: flex;
   justify-content: center;
@@ -255,6 +259,8 @@ main {
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
 }
+
+/* ---------Partners container---------- */
 .partners-container {
   display: flex;
   justify-content: center;
@@ -278,14 +284,6 @@ main {
   justify-content: center;
   gap: 120px;
   animation: 3s fade ease-out;
-}
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 .slide:nth-child(3) {
   margin: auto;
@@ -329,6 +327,8 @@ main {
   opacity: 0.8;
   transition: 0.5s;
 }
+
+/* ---------Questions container---------- */
 .askedquestions-container {
   display: flex;
   justify-content: center;
@@ -411,20 +411,12 @@ main {
   opacity: 0;
   animation: 0.1s slideIn ease-in-out forwards 0.1s, typing 0.1s;
 }
-@keyframes typing {
-  from {
-    height: 0;
-  }
-}
-@keyframes slideIn {
-  100% {
-    transform: translateY(0px);
-    opacity: 1;
-  }
-}
+
 .rotateArrow {
   transform: rotate(270deg);
 }
+
+/* ---------Footer container---------- */
 footer {
   display: flex;
   justify-content: center;
@@ -555,9 +547,32 @@ footer {
   background-color: black;
   opacity: 0.5;
 }
+
 .hidden {
   display: none;
 }
+
+/* ---------Animations---------- */
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes typing {
+  from {
+    height: 0;
+  }
+}
+@keyframes slideIn {
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+/* ---------Animations---------- */
 
 @media only screen and (max-width: 1024px) {
   /* ---------Header---------- */
